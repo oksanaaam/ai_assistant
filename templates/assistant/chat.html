@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Chat</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+        }
+
+        .user {
+            color: blue;
+        }
+
+        .ai {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Chat</h1>
+
+        {% if previous_conversations %}
+            <h2>Previous Conversations:</h2>
+            <ul>
+                {% for conversation in previous_conversations %}
+                    <li>User: {{ conversation.user_input }}</li>
+                    <li>AI: {{ conversation.ai_response }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <p><input type="text" name="user_input" placeholder="Enter your message" /></p>
+            <p><input type="submit" value="Send" /></p>
+        </form>
+
+        {% if user_input %}
+            <div class="message">
+                <p class="user">User: {{ user_input }}</p>
+                <p class="ai">AI: {{ ai_response }}</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
