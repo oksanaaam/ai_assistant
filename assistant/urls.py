@@ -1,9 +1,9 @@
 from django.urls import path
 
-from assistant.views import chat_view
+from assistant.views import gpt_conversation
 
 urlpatterns = [
-    path("", chat_view, name="chat"),
+    path("", gpt_conversation, name="chat"),
 ]
 
 app_name = "assistant"
