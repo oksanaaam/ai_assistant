@@ -1,12 +1,86 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>AI Chat</title>
     <style>
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
+        body {
+            background-color: #f1f1f1;
+            font-family: Arial, sans-serif;
+        }
+            .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333333;
+        }
+
+        h2 {
+            color: #333333;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        form {
+            margin-top: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        input[type="text"] {
+            width: 90%;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        #microphoneBtn {
+            background-color: #337ab7;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        #microphoneBtn.active {
+            background-color: #286090;
         }
 
         .message {
@@ -20,7 +94,13 @@
         .ai {
             color: red;
         }
+
+        .error {
+            color: red;
+            font-size: 14px;
+        }
     </style>
+
 </head>
 <body>
     <div class="container">
@@ -36,18 +116,54 @@
             </ul>
         {% endif %}
 
-        <form method="POST">
-            {% csrf_token %}
-            <p><input type="text" name="user_input" placeholder="Enter your message" /></p>
-            <p><input type="submit" value="Send" /></p>
-        </form>
-
         {% if user_input %}
             <div class="message">
                 <p class="user">User: {{ user_input }}</p>
                 <p class="ai">AI: {{ ai_response }}</p>
             </div>
         {% endif %}
+
+        <form method="POST" style="display: flex;">
+            {% csrf_token %}
+              <input type="text" name="user_input" id="user_input" placeholder="Enter your message" required/>
+              {% if empty_input_error %}
+                  <span style="color: red;">Please enter your question.</span>
+              {% endif %}
+              <button type="submit" style="margin-left: 10px;">Send</button>
+        </form>
+
+        <button id="microphoneBtn">Microphone</button>
+
     </div>
+
+    <script>
+        const microphoneBtn = document.getElementById("microphoneBtn");
+
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then((stream) => {
+                const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                recognition.lang = "uk-UA";
+
+                recognition.onresult = (event) => {
+                    const speechResult = event.results[0][0].transcript;
+
+                    const processedSpeechResult = speechResult.trim() + (speechResult.trim().endsWith("?") ? "" : "?");
+
+                    document.getElementById("user_input").value = processedSpeechResult;
+                    document.querySelector("form").submit();
+                };
+
+                recognition.onerror = (event) => {
+                    console.error("Error recognizing speech:", event.error);
+                };
+
+                microphoneBtn.addEventListener("click", () => {
+                    recognition.start();
+                });
+            })
+            .catch((error) => {
+                console.error("Error accessing microphone:", error);
+            });
+    </script>
 </body>
 </html>

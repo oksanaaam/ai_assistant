@@ -18,7 +18,10 @@ def generate_response(prompt):
 
 def gpt_conversation(request):
     if request.method == "POST":
-        user_input = request.POST.get('user_input')
+        user_input = request.POST.get("user_input")
+
+        if not user_input.strip():
+            return render(request, "assistant/chat.html", {"empty_input_error": True})
 
         previous_conversations = Conversation.objects.all().order_by("-created_at")[:5]
         context = "\n".join([conv.user_input for conv in previous_conversations])
