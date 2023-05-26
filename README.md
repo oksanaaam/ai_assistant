@@ -1,23 +1,16 @@
 
 ### Installation
 
-1. Fork the repo (GitHub repository)
-2. Clone the forked repo
+1. Clone the repo
 `git clone https://github.com/oksanaaam/ai_assistant.git`
-3. Open the project folder in your IDE
-4. Open a terminal in the project folder
-5. If you are using PyCharm - it may propose you to automatically create venv for your project and install requirements in it, but if not:
+2. Open the project folder in your IDE
+3. Open a terminal in the project folder
+4. If you are using PyCharm - it may propose you to automatically create venv for your project and install requirements in it, but if not:
 ```
 python -m venv venv
 venv\Scripts\activate (on Windows)
 source venv/bin/activate (on macOS)
 pip install -r requirements.txt
-```
-
-Also, you need install some required libraries and other dependencies:
-```
-pip install openai
-pip install Django
 ```
 
 
@@ -37,7 +30,8 @@ DEBUG = <your debug>
 OPENAI_API_KEY = <your OPENAI_API_KEY>
 ```
 
-### Run server
+### Set up the SQLite database and run server
+Run the database migrations to create the necessary tables in the SQLite database
 ```
 python manage.py migrate
 python manage.py runserver
