@@ -23,7 +23,7 @@ def gpt_conversation(request):
         if not user_input.strip():
             return render(request, "assistant/chat.html", {"empty_input_error": True})
 
-        previous_conversations = Conversation.objects.all().order_by("-created_at")[:5]
+        previous_conversations = Conversation.objects.order_by("-created_at")[:5]
         context = "\n".join([conv.user_input for conv in previous_conversations])
         conversation = f"{context}\nUser: {user_input}"
 
