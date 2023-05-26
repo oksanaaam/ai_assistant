@@ -34,7 +34,7 @@ OPENAI_API_KEY = <your OPENAI_API_KEY>
 Run the database migrations to create the necessary tables in the SQLite database
 ```
 python manage.py makemigrations assistant
-python manage.py migrate assistant
+python manage.py migrate
 python manage.py runserver
 ```
 

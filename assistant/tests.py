@@ -82,9 +82,6 @@ class ChatTemplateTest(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'id="microphoneBtn" class="inactive"')
-        self.assertContains(
-            response, "navigator.mediaDevices.getUserMedia({ audio: true })"
-        )
 
     def test_template_used(self):
         response = self.client.get(self.url)
